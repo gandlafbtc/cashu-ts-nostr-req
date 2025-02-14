@@ -1,50 +1,13 @@
-# React + TypeScript + Vite
+# Tester for [cashu-proxy](https://github.com/gudnuf/cashu-proxy)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a demo cashu wallet that can lookup Cashu mints by their pubkey and then talk to the mint via the cashu-proxy.
 
-Currently, two official plugins are available:
+The most interesting thing here is I implemented a [custom request](https://github.com/gudnuf/cashu-proxy-tester/blob/master/src/custom-cashu-request.ts) that a `CashuMint` can be initialized with. This custom request will send kind `23338` events to mints.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A mint could support various transports like 'clearnet' or 'tor' or '[nipxx](https://github.com/gudnuf/cashu-proxy/tree/master#nip-xx)' and then the user can choose.
 
-## Expanding the ESLint configuration
+### Bonus
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Along with the custom request, cashu-ts allows us to use any string as a `mintUrl`, so we can just initialize a mint with their pubkey in place of a URL.
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+This means tokens can be created with a pubkey in place of the mint url. Then when this token is sent the recipient can just query nostr for the corresponding kind `11111`
