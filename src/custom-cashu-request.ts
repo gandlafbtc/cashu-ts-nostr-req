@@ -1,6 +1,10 @@
-import { NDKEvent, NDKPrivateKeySigner, NostrEvent } from "npm:@nostr-dev-kit/ndk";
+import {
+  NDKEvent,
+  NDKPrivateKeySigner,
+  NostrEvent,
+} from "npm:@nostr-dev-kit/ndk";
 import { generateSecretKey, getPublicKey, nip44 } from "npm:nostr-tools";
-import { ndkConnected } from "./index.ts";
+import { ndkConnected, requestTimeout } from "./index.ts";
 import { ndk } from "./ndk.ts";
 
 const kind = 23338;
@@ -45,7 +49,7 @@ async function _customCashuRequest({
   const convoKey = nip44.getConversationKey(randomKey, mintPubkey);
   const encryptedContent = nip44.encrypt(
     JSON.stringify(requestContent),
-    convoKey
+    convoKey,
   );
 
   const requestEvent = new NDKEvent(ndk, {
@@ -64,14 +68,21 @@ async function _customCashuRequest({
 
   return new Promise((resolve, reject) => {
     const responseSub = ndk.subscribe(responseFilter);
-
+    let isResolved = false;
     responseSub.on("event", (event) => {
       const decryptedContent = nip44.decrypt(event.content, convoKey);
       const responseContent = JSON.parse(decryptedContent);
       responseSub.stop();
       console.log("responseContent", responseContent);
       resolve(responseContent);
+      isResolved = true;
     });
+
+    setTimeout(() => {
+      if (!isResolved) {
+        reject(new Error(`Connection timed out after ${requestTimeout} ms`));
+      }
+    }, requestTimeout);
 
     try {
       console.log(`PUBLISHING to relays`, requestEvent.rawEvent());
