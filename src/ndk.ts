@@ -1,14 +1,3 @@
-import NDK from "@nostr-dev-kit/ndk";
-import { RELAYS } from "./env";
+import NDK from "npm:@nostr-dev-kit/ndk";
 
-const ndk = new NDK({ explicitRelayUrls: RELAYS });
-
-let ndkConnected = false;
-
-ndk.connect().then(() => {
-  console.log("connected to relays");
-  ndkConnected = true;
-});
-
-export { ndkConnected };
-export default ndk;
+export const ndk = new NDK();

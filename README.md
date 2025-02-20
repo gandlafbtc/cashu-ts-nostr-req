@@ -1,10 +1,13 @@
-# Tester for [cashu-proxy](https://github.com/gudnuf/cashu-proxy)
+# Cashu-ts plugin for requests proxied through [proxley]() [based on cashu-proxy by @gudnuf](https://github.com/gudnuf/cashu-proxy)
 
-This is a demo cashu wallet that can lookup Cashu mints by their pubkey and then talk to the mint via the cashu-proxy.
+Extracted and refactored to work as a module from [here](https://github.com/gudnuf/cashu-proxy-tester)
 
-The most interesting thing here is I implemented a [custom request](https://github.com/gudnuf/cashu-proxy-tester/blob/master/src/custom-cashu-request.ts) that a `CashuMint` can be initialized with. This custom request will send kind `23338` events to mints.
+## Build
 
-A mint could support various transports like 'clearnet' or 'tor' or '[nipxx](https://github.com/gudnuf/cashu-proxy/tree/master#nip-xx)' and then the user can choose.
+```
+deno install
+./_build_npm.ts 0.0.1
+```
 
 ### Bonus
 

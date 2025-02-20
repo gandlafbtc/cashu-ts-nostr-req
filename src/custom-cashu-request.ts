@@ -1,6 +1,7 @@
-import { NDKEvent, NDKPrivateKeySigner, NostrEvent } from "@nostr-dev-kit/ndk";
-import ndk, { ndkConnected } from "./ndk";
-import { generateSecretKey, getPublicKey, nip44 } from "nostr-tools";
+import { NDKEvent, NDKPrivateKeySigner, NostrEvent } from "npm:@nostr-dev-kit/ndk";
+import { generateSecretKey, getPublicKey, nip44 } from "npm:nostr-tools";
+import { ndkConnected } from "./index.ts";
+import { ndk } from "./ndk.ts";
 
 const kind = 23338;
 
@@ -73,7 +74,7 @@ async function _customCashuRequest({
     });
 
     try {
-      console.log("PUBLISHING", requestEvent.rawEvent());
+      console.log(`PUBLISHING to relays`, requestEvent.rawEvent());
       requestEvent.publish();
     } catch (error: unknown) {
       console.error("Error publishing event", error);
